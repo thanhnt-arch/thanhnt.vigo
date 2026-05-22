@@ -2610,111 +2610,129 @@ const vocabData = [
   audio.play().catch(e => console.log("Lỗi phát âm thanh:", e));
 }
 
+// ==================== HỆ THỐNG XỬ LÝ FLASHCARD ĐÃ SỬA LỖI LOA & PHÓNG TO CHỮ ====================
+function playFcAudio() {
+  if (fcCards.length === 0) return;
+  const card = fcCards[fcIndex];
+  
+  // Tách lấy chữ Hán thô sạch để đọc
+  let cleanText = card.hanzi.split('【')[0].trim();
+  
+  // Sử dụng công nghệ đọc Speech Synthesis chính thống của trình duyệt, bao sân mọi thiết bị
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // Tắt âm thừa đang phát trước đó
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'zh-CN'; // Giọng Trung đại lục chuẩn Bắc Kinh
+    utterance.rate = 0.85;    // Tốc độ đọc vừa phải, dễ nghe
+    window.speechSynthesis.speak(utterance);
+  } else {
+    // Phương án dự phòng nếu trình duyệt quá cũ
+    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=${encodeURIComponent(cleanText)}`;
+    const audio = new Audio(audioUrl);
+    audio.play().catch(e => console.log("Lỗi phát âm thanh:", e));
+  }
+}
+
 function loadFlashcards() {
-      const level = document.getElementById('fc-level').value;
-      fcCards = level === 'all' ? [...vocabData] : vocabData.filter(v => v.hsk === parseInt(level));
-      fcCards.sort(() => Math.random() - 0.5);
-      fcIndex = 0;
-      isFlipped = false;
-      showFlashcard('none');
+  const level = document.getElementById('fc-level').value;
+  fcCards = level === 'all' ? [...vocabData] : vocabData.filter(v => v.hsk === parseInt(level));
+  fcCards.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  isFlipped = false;
+  showFlashcard('none');
+}
+
+function showFlashcard(direction) {
+  if (fcCards.length === 0) {
+    document.getElementById('fc-hanzi').textContent = "📭";
+    document.getElementById('fc-pinyin').textContent = "";
+    document.getElementById('fc-viet').textContent = "Trống dữ liệu";
+    return;
+  }
+  const card = fcCards[fcIndex];
+
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+  isFlipped = false;
+
+  // 1. Gọt sạch ngoặc vuông mặt trước
+  let cleanHanzi = card.hanzi.split('【')[0].trim();
+  document.getElementById('fc-hanzi').textContent = cleanHanzi;
+  document.getElementById('fc-pinyin').textContent = card.pinyin;
+  
+  // 2. Xử lý mặt sau: TÁCH BIỆT PHIÊN ÂM VÀ PHÓNG TO NGHĨA CÂU BỰ CHUẨN ĐẸP
+  document.getElementById('fc-viet').textContent = card.viet;
+  
+  let exampleHtml = `<div class="font-cn text-base text-txt-2 mb-2">${card.example || ''}</div>`;
+  if (card.exTrans) {
+    if (card.exTrans.includes('(') && card.exTrans.includes(')')) {
+      const parts = card.exTrans.split(')');
+      const pinyinCau = parts[0] + ')';
+      const nghiaCau = parts[1].trim();
+      
+      exampleHtml += `
+        <div style="color: #6b7280; font-style: italic; font-size: 0.85rem; margin-bottom: 6px;">${pinyinCau}</div>
+        <div style="font-size: 1.35rem; font-weight: 700; color: #16a34a; margin-top: 6px; line-height: 1.4;">${nghiaCau}</div>
+      `;
+    } else {
+      exampleHtml += `<div style="font-size: 1.35rem; font-weight: 700; color: #16a34a; margin-top: 6px;">${card.exTrans}</div>`;
     }
+  }
+  document.getElementById('fc-example').innerHTML = exampleHtml;
 
-    function showFlashcard(direction) {
-      if (fcCards.length === 0) {
-        document.getElementById('fc-hanzi').textContent = "📭";
-        document.getElementById('fc-pinyin').textContent = "";
-        document.getElementById('fc-viet').textContent = "Trống dữ liệu";
-        return;
-      }
-      const card = fcCards[fcIndex];
+  const tagEl = document.getElementById('fc-tag');
+  tagEl.textContent = 'HSK ' + card.hsk;
+  tagEl.className = `tag-hsk${card.hsk} text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-medium`;
 
-      const fc = document.getElementById('flashcard');
-      fc.classList.remove('flipped');
-      isFlipped = false;
+  document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcCards.length * 100) + '%';
+  document.getElementById('fc-count').textContent = `${fcIndex + 1}/${fcCards.length}`;
 
-      let cleanHanzi = card.hanzi.split('【')[0].trim();
-      document.getElementById('fc-hanzi').textContent = cleanHanzi;
-      document.getElementById('fc-pinyin').textContent = card.pinyin;
-      document.getElementById('fc-viet').textContent = card.viet;
-      document.getElementById('fc-example').innerHTML = `${card.example}<br><span class="text-txt-3 text-xs not-italic">${card.exTrans}</span>`;
-      const tagEl = document.getElementById('fc-tag');
-      tagEl.textContent = 'HSK ' + card.hsk;
-      tagEl.className = `tag-hsk${card.hsk} text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-medium`;
+  const inner = document.getElementById('flip-inner-el');
+  inner.classList.remove('slide-in-right', 'slide-in-left');
+  if (direction === 'right') {
+    void inner.offsetWidth;
+    inner.classList.add('slide-in-right');
+  } else if (direction === 'left') {
+    void inner.offsetWidth;
+    inner.classList.add('slide-in-left');
+  }
 
-      document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcCards.length * 100) + '%';
-      document.getElementById('fc-count').textContent = `${fcIndex + 1}/${fcCards.length}`;
+  document.getElementById('btn-prev').style.opacity = fcIndex > 0 ? '1' : '0.3';
+  document.getElementById('btn-next').style.opacity = fcIndex < fcCards.length - 1 ? '1' : '0.3';
+}
 
-      const inner = document.getElementById('flip-inner-el');
-      inner.classList.remove('slide-in-right', 'slide-in-left');
-      if (direction === 'right') {
-        void inner.offsetWidth;
-        inner.classList.add('slide-in-right');
-      } else if (direction === 'left') {
-        void inner.offsetWidth;
-        inner.classList.add('slide-in-left');
-      }
+function flipCard() {
+  if (isAnimating) return;
+  document.getElementById('flashcard').classList.toggle('flipped');
+  isFlipped = !isFlipped;
+}
 
-      document.getElementById('btn-prev').style.opacity = fcIndex > 0 ? '1' : '0.3';
-      document.getElementById('btn-next').style.opacity = fcIndex < fcCards.length - 1 ? '1' : '0.3';
-    }
+function goToCard(newIndex, direction) {
+  if (isAnimating || newIndex < 0 || newIndex >= fcCards.length) return;
+  isAnimating = true;
+  const inner = document.getElementById('flip-inner-el');
+  inner.classList.add(direction === 'right' ? 'slide-out-left' : 'slide-out-right');
 
-    function flipCard() {
-      if (isAnimating) return;
-      document.getElementById('flashcard').classList.toggle('flipped');
-      isFlipped = !isFlipped;
-    }
+  setTimeout(() => {
+    inner.classList.remove('slide-out-left', 'slide-out-right');
+    fcIndex = newIndex;
+    showFlashcard(direction);
+    isAnimating = false;
+  }, 300);
+}
 
-    function goToCard(newIndex, direction) {
-      if (isAnimating || newIndex < 0 || newIndex >= fcCards.length) return;
-      isAnimating = true;
-      const inner = document.getElementById('flip-inner-el');
-      inner.classList.add(direction === 'right' ? 'slide-out-left' : 'slide-out-right');
+function nextCardManual() {
+  if (fcIndex < fcCards.length - 1) {
+    goToCard(fcIndex + 1, 'right');
+  } else {
+    showToast('🔄 Đã hết bộ thẻ! Xáo lại...', 'info');
+    fcCards.sort(() => Math.random() - 0.5);
+    fcIndex = 0;
+    showFlashcard('right');
+  }
+}
 
-      setTimeout(() => {
-        inner.classList.remove('slide-out-left', 'slide-out-right');
-        fcIndex = newIndex;
-        showFlashcard(direction);
-        isAnimating = false;
-      }, 300);
-    }
-
-    function nextCardManual() {
-      if (fcIndex < fcCards.length - 1) {
-        goToCard(fcIndex + 1, 'right');
-      } else {
-        showToast('🔄 Đã hết bộ thẻ! Xáo lại...', 'info');
-        fcCards.sort(() => Math.random() - 0.5);
-        fcIndex = 0;
-        showFlashcard('right');
-      }
-    }
-
-    function prevCard() { if (fcIndex > 0) goToCard(fcIndex - 1, 'left'); }
-
-    function fcAction(difficulty) {
-      if (isAnimating || fcCards.length === 0) return;
-      const card = fcCards[fcIndex];
-      if (!state.wordsLearned.includes(card.id)) {
-        state.wordsLearned.push(card.id);
-      }
-
-      let xpGain = difficulty === 'easy' ? 5 : difficulty === 'ok' ? 3 : 1;
-      state.xp += xpGain;
-      recordStudy();
-
-      if (difficulty === 'easy') showToast(`+${xpGain} XP · Dễ quá! 🎯`, 'success');
-      else if (difficulty === 'ok') showToast(`+${xpGain} XP · Cần ôn lại nhé 💪`, 'info');
-      else showToast(`+${xpGain} XP · Sẽ sớm nhớ thôi! 🔁`, 'warn');
-
-      if (fcIndex < fcCards.length - 1) {
-        goToCard(fcIndex + 1, 'right');
-      } else {
-        showToast('🎉 Đã hết bộ thẻ! Xáo lại...', 'success');
-        fcCards.sort(() => Math.random() - 0.5);
-        fcIndex = 0;
-        showFlashcard('right');
-      }
-    }
+function prevCard() { if (fcIndex > 0) goToCard(fcIndex - 1, 'left'); }
 
     // ==================== QUIZ ====================
     function resetQuizView() {
