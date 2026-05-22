@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>thanhnt — Học Tiếng Trung Cá Nhân</title>
+  <title>thanhnt — Học Tiếng Trung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -2600,30 +2600,20 @@ const vocabData = [
       }).join('');
     }
 
-    // ==================== FLASHCARDS ====================
-    function playFcAudio() {
-  if (fcCards.length === 0) return;
-  const card = fcCards[fcIndex];
-  // Sử dụng thuộc tính audio có sẵn trong object từ vựng, nếu không có tự sinh link Google TTS
-  const audioUrl = card.audio || `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=${encodeURIComponent(card.hanzi)}`;
-  const audio = new Audio(audioUrl);
-  audio.play().catch(e => console.log("Lỗi phát âm thanh:", e));
-}
-
+ 
 // ==================== HỆ THỐNG XỬ LÝ FLASHCARD ĐÃ SỬA LỖI LOA & PHÓNG TO CHỮ ====================
 function playFcAudio() {
   if (fcCards.length === 0) return;
   const card = fcCards[fcIndex];
   
-  // Gọt sạch chữ Hán để đọc
+  // Gọt sạch chữ Hán thô để phát âm
   let cleanText = card.hanzi.split('【')[0].trim();
   
-  // 🌟 ĐÃ ĐỔI ĐẦU LINK THÀNH HTTPS VÀ THÊM THAM SỐ PHÁ BĂNG BẢO MẬT CỦA GITHUB
+  // Sử dụng đầu mã HTTPS chống lỗi Mixed Content bảo mật của GitHub
   const audioUrl = `https://dict.youdao.com/dictvoice?le=zh&audio=${encodeURIComponent(cleanText)}`;
   const audio = new Audio(audioUrl);
-  
   audio.play().catch(e => {
-    console.log("Lỗi luồng phát GitHub:", e);
+    console.log("Lỗi luồng phát âm thanh:", e);
   });
 }
 
