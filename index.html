@@ -2615,22 +2615,16 @@ function playFcAudio() {
   if (fcCards.length === 0) return;
   const card = fcCards[fcIndex];
   
-  // Tách lấy chữ Hán thô sạch để đọc
+  // Gọt sạch chữ Hán để đọc
   let cleanText = card.hanzi.split('【')[0].trim();
   
-  // Sử dụng công nghệ đọc Speech Synthesis chính thống của trình duyệt, bao sân mọi thiết bị
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); // Tắt âm thừa đang phát trước đó
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'zh-CN'; // Giọng Trung đại lục chuẩn Bắc Kinh
-    utterance.rate = 0.85;    // Tốc độ đọc vừa phải, dễ nghe
-    window.speechSynthesis.speak(utterance);
-  } else {
-    // Phương án dự phòng nếu trình duyệt quá cũ
-    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=${encodeURIComponent(cleanText)}`;
-    const audio = new Audio(audioUrl);
-    audio.play().catch(e => console.log("Lỗi phát âm thanh:", e));
-  }
+  // 🌟 ĐÃ ĐỔI ĐẦU LINK THÀNH HTTPS VÀ THÊM THAM SỐ PHÁ BĂNG BẢO MẬT CỦA GITHUB
+  const audioUrl = `https://dict.youdao.com/dictvoice?le=zh&audio=${encodeURIComponent(cleanText)}`;
+  const audio = new Audio(audioUrl);
+  
+  audio.play().catch(e => {
+    console.log("Lỗi luồng phát GitHub:", e);
+  });
 }
 
 function loadFlashcards() {
