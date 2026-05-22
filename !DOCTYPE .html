@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Góc Học Ngoại Ngữ Riêng Tư</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #f0f2f5; padding: 20px; margin: 0; }
+        .container { max-width: 500px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .card { width: 100px%; min-height: 150px; background: #e3f2fd; margin: 20px 0; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; transition: 0.2s; padding: 20px; box-sizing: border-box; }
+        button { padding: 12px 24px; font-size: 16px; background: #007BFF; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #0056b3; }
+        input { padding: 12px; width: 80%; font-size: 16px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div id="lockScreen" class="container">
+        <h2>🔒 Trang web được bảo vệ</h2>
+        <p>Vui lòng nhập mật khẩu cá nhân để vào học</p>
+        <input type="password" id="passwordInput" placeholder="Nhập mật khẩu tại đây...">
+        <button onclick="checkPassword()">Mở khóa</button>
+    </div>
+
+    <div id="mainContent" class="container" style="display: none;">
+        <h2>Học Từ Vựng Mỗi Ngày 🚀</h2>
+        <div class="card" id="vocabCard" onclick="flipCard()">Đang tải...</div>
+        <button onclick="nextCard()">Từ tiếp theo ➡️</button>
+    </div>
+
+    <script>
+        // 1. CÀI ĐẶT MẬT KHẨU CỦA ANH TẠI ĐÂY (Thay đổi chữ 'anhyeuhoc' thành mật khẩu anh muốn)
+        const MY_PASSWORD = "anhyeuhoc"; 
+
+        // 2. DANH SÁCH TỪ VỰNG CỦA ANH
+        const vocabulary = [
+            { word: "Aesthetic", meaning: "Thẩm mỹ, có gu" },
+            { word: "Resilient", meaning: "Kiên cường, kiên nhẫn" },
+            { word: "Ephemeral", meaning: "Phù du, chóng tàn" }
+        ];
+
+        let currentIndex = 0;
+        let isShowingWord = true;
+
+        function checkPassword() {
+            const input = document.getElementById("passwordInput").value;
+            if (input === MY_PASSWORD) {
+                document.getElementById("lockScreen").style.display = "none";
+                document.getElementById("mainContent").style.display = "block";
+                showCard();
+            } else {
+                alert("Sai mật khẩu rồi anh ơi! ❌");
+            }
+        }
+
+        function showCard() {
+            const card = document.getElementById("vocabCard");
+            card.innerText = isShowingWord ? vocabulary[currentIndex].word : vocabulary[currentIndex].meaning;
+            card.style.background = isShowingWord ? "#e3f2fd" : "#fff9c4";
+        }
+
+        function flipCard() {
+            isShowingWord = !isShowingWord;
+            showCard();
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % vocabulary.length;
+            isShowingWord = true;
+            showCard();
+        }
+    </script>
+</body>
+</html>
