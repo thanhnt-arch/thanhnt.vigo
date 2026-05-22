@@ -1,74 +1,1050 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Góc Học Ngoại Ngữ Riêng Tư</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #f0f2f5; padding: 20px; margin: 0; }
-        .container { max-width: 500px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .card { width: 100px%; min-height: 150px; background: #e3f2fd; margin: 20px 0; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; transition: 0.2s; padding: 20px; box-sizing: border-box; }
-        button { padding: 12px 24px; font-size: 16px; background: #007BFF; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
-        button:hover { background: #0056b3; }
-        input { padding: 12px; width: 80%; font-size: 16px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thanhnt.vigo — Học Tiếng Trung Cá Nhân</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0a0a0f',
+            panel: '#0e0e14',
+            surface: '#13131b',
+            'surface-2': '#1a1a24',
+            'surface-3': '#22222e',
+            accent: '#818cf8',
+            'accent-dim': '#6366f1',
+            'accent-glow': '#a5b4fc',
+            success: '#34d399',
+            danger: '#f87171',
+            warn: '#fbbf24',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            cn: ['Noto Sans SC', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #fff; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #818cf830; border-radius: 10px; }
+
+    /* Card Flip */
+    .flip-card { perspective: 1200px; }
+    .flip-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-back { transform: rotateY(180deg); }
+
+    /* Glow */
+    .glow-accent { box-shadow: 0 0 30px rgba(129,140,248,0.15), 0 0 60px rgba(129,140,248,0.05); }
+    .glow-success { box-shadow: 0 0 20px rgba(52,211,153,0.2); }
+    .glow-danger { box-shadow: 0 0 20px rgba(248,113,113,0.2); }
+
+    /* Progress Ring */
+    .progress-ring-circle {
+      transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    /* Fade transitions */
+    .view { display: none; opacity: 0; transform: translateY(10px); }
+    .view.active { display: block; animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* Shake */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* Bounce */
+    @keyframes bounce-in {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .bounce-in { animation: bounce-in 0.5s ease; }
+
+    /* Pulse glow */
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 10px rgba(129,140,248,0.1); }
+      50% { box-shadow: 0 0 25px rgba(129,140,248,0.25); }
+    }
+
+    /* Streak fire */
+    @keyframes flicker {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      25% { transform: scaleY(1.1) scaleX(0.95); }
+      50% { transform: scaleY(0.95) scaleX(1.05); }
+      75% { transform: scaleY(1.05) scaleX(0.98); }
+    }
+    .fire { animation: flicker 0.8s ease-in-out infinite; }
+
+    /* Sidebar */
+    .sidebar-link {
+      transition: all 0.2s ease;
+    }
+    .sidebar-link.active {
+      background: linear-gradient(135deg, rgba(129,140,248,0.12), rgba(129,140,248,0.04));
+      border-right: 2px solid #818cf8;
+    }
+    .sidebar-link.active .link-icon { color: #818cf8; }
+    .sidebar-link.active .link-text { color: #fff; }
+
+    /* Quiz option */
+    .quiz-opt {
+      transition: all 0.2s ease;
+    }
+    .quiz-opt:hover:not(.disabled) {
+      border-color: rgba(129,140,248,0.4);
+      background: rgba(129,140,248,0.06);
+    }
+    .quiz-opt.correct {
+      border-color: #34d399 !important;
+      background: rgba(52,211,153,0.1) !important;
+    }
+    .quiz-opt.wrong {
+      border-color: #f87171 !important;
+      background: rgba(248,113,113,0.1) !important;
+    }
+
+    /* Toast */
+    @keyframes toast-slide { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toast-out { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+    .toast-in { animation: toast-slide 0.35s ease forwards; }
+    .toast-out { animation: toast-out 0.35s ease forwards; }
+
+    /* Floating bg particles */
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(10px, -20px); }
+      50% { transform: translate(-5px, -10px); }
+      75% { transform: translate(15px, 5px); }
+    }
+
+    /* Mobile sidebar */
+    .mobile-sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-sidebar.open { transform: translateX(0); }
+
+    /* Hanzi stroke animation feel */
+    .hanzi-display {
+      text-shadow: 0 0 40px rgba(129,140,248,0.15);
+    }
+
+    /* Tag */
+    .tag-hsk1 { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .tag-hsk2 { background: rgba(129,140,248,0.1); color: #818cf8; border: 1px solid rgba(129,140,248,0.2); }
+    .tag-hsk3 { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+  </style>
 </head>
-<body>
+<body class="flex">
 
-    <div id="lockScreen" class="container">
-        <h2>🔒 Trang web được bảo vệ</h2>
-        <p>Vui lòng nhập mật khẩu cá nhân để vào học</p>
-        <input type="password" id="passwordInput" placeholder="Nhập mật khẩu tại đây...">
-        <button onclick="checkPassword()">Mở khóa</button>
+  <!-- ============ MOBILE OVERLAY ============ -->
+  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden" onclick="closeMobileSidebar()"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside id="sidebar" class="mobile-sidebar lg:transform-none fixed lg:sticky top-0 left-0 h-screen w-64 bg-panel border-r border-white/5 z-50 flex flex-col">
+    <!-- Brand -->
+    <div class="p-5 border-b border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-accent to-accent-dim flex items-center justify-center shadow-lg shadow-accent/20">
+          <span class="text-white font-bold text-sm font-cn">中</span>
+        </div>
+        <div>
+          <div class="text-sm font-semibold tracking-wide">thanhnt.vigo</div>
+          <div class="text-[10px] text-white/30 tracking-wider">HỌC TIẾNG TRUNG</div>
+        </div>
+      </div>
     </div>
 
-    <div id="mainContent" class="container" style="display: none;">
-        <h2>Học Từ Vựng Mỗi Ngày 🚀</h2>
-        <div class="card" id="vocabCard" onclick="flipCard()">Đang tải...</div>
-        <button onclick="nextCard()">Từ tiếp theo ➡️</button>
+    <!-- Navigation -->
+    <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+      <button onclick="switchView('dashboard')" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/[0.03]" data-view="dashboard">
+        <i data-lucide="layout-dashboard" class="w-4 h-4 link-icon"></i>
+        <span class="text-[13px] link-text">Tổng quan</span>
+      </button>
+      <button onclick="switchView('flashcard')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/[0.03]" data-view="flashcard">
+        <i data-lucide="layers" class="w-4 h-4 link-icon"></i>
+        <span class="text-[13px] link-text">Thẻ từ vựng</span>
+      </button>
+      <button onclick="switchView('quiz')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/[0.03]" data-view="quiz">
+        <i data-lucide="brain" class="w-4 h-4 link-icon"></i>
+        <span class="text-[13px] link-text">Luyện tập</span>
+      </button>
+      <button onclick="switchView('lessons')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/[0.03]" data-view="lessons">
+        <i data-lucide="book-open" class="w-4 h-4 link-icon"></i>
+        <span class="text-[13px] link-text">Bài học</span>
+      </button>
+      <button onclick="switchView('stats')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/[0.03]" data-view="stats">
+        <i data-lucide="bar-chart-3" class="w-4 h-4 link-icon"></i>
+        <span class="text-[13px] link-text">Thống kê</span>
+      </button>
+    </nav>
+
+    <!-- User -->
+    <div class="p-4 border-t border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-surface-2 border border-white/10 flex items-center justify-center text-xs font-bold text-accent">T</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-medium text-white/80 truncate">Thanh NT</div>
+          <div class="text-[10px] text-white/30">HSK 3 · 28 ngày streak</div>
+        </div>
+      </div>
     </div>
+  </aside>
 
-    <script>
-        // 1. CÀI ĐẶT MẬT KHẨU CỦA ANH TẠI ĐÂY (Thay đổi chữ 'anhyeuhoc' thành mật khẩu anh muốn)
-        const MY_PASSWORD = "anhyeuhoc"; 
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="flex-1 min-h-screen overflow-y-auto">
+    <!-- Top bar -->
+    <header class="sticky top-0 z-30 bg-bg/80 backdrop-blur-xl border-b border-white/5">
+      <div class="flex items-center justify-between h-14 px-4 lg:px-6">
+        <div class="flex items-center gap-3">
+          <button onclick="openMobileSidebar()" class="lg:hidden p-2 text-white/50 hover:text-white"><i data-lucide="menu" class="w-5 h-5"></i></button>
+          <div id="view-title" class="text-sm font-medium text-white/70">Tổng quan</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+            <span class="fire text-sm">🔥</span>
+            <span id="streak-display" class="text-xs font-semibold text-orange-400">0</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20">
+            <i data-lucide="zap" class="w-3 h-3 text-accent"></i>
+            <span id="xp-display" class="text-xs font-semibold text-accent">0 XP</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
-        // 2. DANH SÁCH TỪ VỰNG CỦA ANH
-        const vocabulary = [
-            { word: "Aesthetic", meaning: "Thẩm mỹ, có gu" },
-            { word: "Resilient", meaning: "Kiên cường, kiên nhẫn" },
-            { word: "Ephemeral", meaning: "Phù du, chóng tàn" }
-        ];
+    <div class="p-4 lg:p-6 max-w-6xl mx-auto">
 
-        let currentIndex = 0;
-        let isShowingWord = true;
+      <!-- ====== DASHBOARD VIEW ====== -->
+      <div id="view-dashboard" class="view active">
+        <!-- Greeting -->
+        <div class="mb-8">
+          <h1 class="text-2xl sm:text-3xl font-semibold" id="greeting-text">Chào buổi sáng, Thanh 👋</h1>
+          <p class="text-white/40 text-sm mt-1">Hãy giữ streak và tiếp tục hành trình nhé!</p>
+        </div>
 
-        function checkPassword() {
-            const input = document.getElementById("passwordInput").value;
-            if (input === MY_PASSWORD) {
-                document.getElementById("lockScreen").style.display = "none";
-                document.getElementById("mainContent").style.display = "block";
-                showCard();
-            } else {
-                alert("Sai mật khẩu rồi anh ơi! ❌");
-            }
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div class="p-4 rounded-xl bg-surface border border-white/5 hover:border-accent/20 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center"><i data-lucide="flame" class="w-3.5 h-3.5 text-accent"></i></div>
+              <span class="text-[10px] text-white/30 uppercase tracking-wider">Streak</span>
+            </div>
+            <div class="text-2xl font-bold" id="dash-streak">0</div>
+            <div class="text-[10px] text-white/30 mt-0.5">ngày liên tiếp</div>
+          </div>
+          <div class="p-4 rounded-xl bg-surface border border-white/5 hover:border-success/20 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-success/10 flex items-center justify-center"><i data-lucide="book-marked" class="w-3.5 h-3.5 text-success"></i></div>
+              <span class="text-[10px] text-white/30 uppercase tracking-wider">Từ đã học</span>
+            </div>
+            <div class="text-2xl font-bold" id="dash-words">0</div>
+            <div class="text-[10px] text-white/30 mt-0.5">từ vựng</div>
+          </div>
+          <div class="p-4 rounded-xl bg-surface border border-white/5 hover:border-warn/20 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-warn/10 flex items-center justify-center"><i data-lucide="target" class="w-3.5 h-3.5 text-warn"></i></div>
+              <span class="text-[10px] text-white/30 uppercase tracking-wider">Độ chính xác</span>
+            </div>
+            <div class="text-2xl font-bold" id="dash-accuracy">0%</div>
+            <div class="text-[10px] text-white/30 mt-0.5">quiz đúng</div>
+          </div>
+          <div class="p-4 rounded-xl bg-surface border border-white/5 hover:border-accent/20 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center"><i data-lucide="clock" class="w-3.5 h-3.5 text-accent"></i></div>
+              <span class="text-[10px] text-white/30 uppercase tracking-wider">Hôm nay</span>
+            </div>
+            <div class="text-2xl font-bold" id="dash-today">0</div>
+            <div class="text-[10px] text-white/30 mt-0.5">từ đã ôn</div>
+          </div>
+        </div>
+
+        <!-- Daily Goal + Quick Actions -->
+        <div class="grid lg:grid-cols-3 gap-4 mb-8">
+          <!-- Daily Goal Ring -->
+          <div class="lg:col-span-1 p-6 rounded-xl bg-surface border border-white/5 flex flex-col items-center justify-center">
+            <div class="text-[10px] tracking-[0.2em] uppercase text-white/30 mb-4">Mục tiêu hôm nay</div>
+            <div class="relative w-36 h-36">
+              <svg class="w-full h-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="8"/>
+                <circle id="goal-ring" class="progress-ring-circle" cx="60" cy="60" r="52" fill="none" stroke="url(#goalGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+                <defs><linearGradient id="goalGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="goal-current" class="text-3xl font-bold">0</span>
+                <span class="text-[10px] text-white/30">/ <span id="goal-target">20</span> từ</span>
+              </div>
+            </div>
+            <button onclick="switchView('flashcard')" class="mt-5 px-5 py-2 bg-accent/10 text-accent text-xs font-semibold rounded-lg border border-accent/20 hover:bg-accent/20 transition-all">
+              Ôn ngay +
+            </button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="lg:col-span-2 grid grid-cols-2 gap-3">
+            <button onclick="switchView('flashcard')" class="group p-5 rounded-xl bg-surface border border-white/5 hover:border-accent/20 transition-all text-left">
+              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-3 group-hover:bg-accent/20 transition-colors">
+                <i data-lucide="layers" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div class="text-sm font-medium">Thẻ từ vựng</div>
+              <div class="text-[11px] text-white/30 mt-1">Lật thẻ ghi nhớ</div>
+            </button>
+            <button onclick="switchView('quiz')" class="group p-5 rounded-xl bg-surface border border-white/5 hover:border-success/20 transition-all text-left">
+              <div class="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center mb-3 group-hover:bg-success/20 transition-colors">
+                <i data-lucide="brain" class="w-5 h-5 text-success"></i>
+              </div>
+              <div class="text-sm font-medium">Luyện tập</div>
+              <div class="text-[11px] text-white/30 mt-1">Quiz chọn đáp án</div>
+            </button>
+            <button onclick="switchView('lessons')" class="group p-5 rounded-xl bg-surface border border-white/5 hover:border-warn/20 transition-all text-left">
+              <div class="w-10 h-10 rounded-lg bg-warn/10 flex items-center justify-center mb-3 group-hover:bg-warn/20 transition-colors">
+                <i data-lucide="book-open" class="w-5 h-5 text-warn"></i>
+              </div>
+              <div class="text-sm font-medium">Bài học</div>
+              <div class="text-[11px] text-white/30 mt-1">HSK 1–3 cấu trúc</div>
+            </button>
+            <button onclick="switchView('stats')" class="group p-5 rounded-xl bg-surface border border-white/5 hover:border-danger/20 transition-all text-left">
+              <div class="w-10 h-10 rounded-lg bg-danger/10 flex items-center justify-center mb-3 group-hover:bg-danger/20 transition-colors">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 text-danger"></i>
+              </div>
+              <div class="text-sm font-medium">Thống kê</div>
+              <div class="text-[11px] text-white/30 mt-1">Xem tiến độ</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Words -->
+        <div class="rounded-xl bg-surface border border-white/5 overflow-hidden">
+          <div class="px-5 py-4 border-b border-white/5 flex justify-between items-center">
+            <span class="text-sm font-medium">Từ vựng gần đây</span>
+            <button onclick="switchView('flashcard')" class="text-[11px] text-accent hover:text-accent-glow transition-colors">Xem tất cả →</button>
+          </div>
+          <div id="recent-words" class="divide-y divide-white/5">
+            <div class="p-5 text-center text-white/20 text-sm">Chưa có từ vựng. Bắt đầu học ngay!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== FLASHCARD VIEW ====== -->
+      <div id="view-flashcard" class="view">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-xl font-semibold">Thẻ Từ Vựng</h2>
+            <p class="text-white/40 text-xs mt-1">Nhấn vào thẻ để lật xem nghĩa</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="fc-level" onchange="loadFlashcards()" class="bg-surface-2 border border-white/10 text-xs text-white/70 rounded-lg px-3 py-2 focus:outline-none focus:border-accent/40">
+              <option value="all">Tất cả HSK</option>
+              <option value="1">HSK 1</option>
+              <option value="2">HSK 2</option>
+              <option value="3">HSK 3</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
+            <div id="fc-progress" class="h-full bg-gradient-to-r from-accent to-accent-glow rounded-full transition-all duration-500" style="width:0%"></div>
+          </div>
+          <span id="fc-count" class="text-xs text-white/40 font-mono">0/0</span>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="flex justify-center mb-8">
+          <div id="flashcard" class="flip-card w-full max-w-md h-72 sm:h-80 cursor-pointer" onclick="flipCard()">
+            <div class="flip-inner relative w-full h-full">
+              <!-- Front -->
+              <div class="flip-front absolute inset-0 rounded-2xl bg-surface border border-white/10 glow-accent flex flex-col items-center justify-center p-6">
+                <div id="fc-hanzi" class="hanzi-display text-6xl sm:text-7xl font-cn font-medium mb-4">你好</div>
+                <div id="fc-pinyin" class="text-lg text-accent/80 font-light mb-2">nǐ hǎo</div>
+                <div id="fc-tag" class="tag-hsk1 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider">HSK 1</div>
+                <div class="absolute bottom-4 text-[10px] text-white/20 flex items-center gap-1"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Nhấn để lật</div>
+              </div>
+              <!-- Back -->
+              <div class="flip-back absolute inset-0 rounded-2xl bg-surface-2 border border-accent/20 flex flex-col items-center justify-center p-6">
+                <div id="fc-viet" class="text-2xl font-semibold mb-3">Xin chào</div>
+                <div id="fc-example" class="text-sm text-white/50 text-center leading-relaxed mb-4 font-cn">你好，我是Thanh。<br><span class="text-white/30 text-xs not-italic">Xin chào, tôi là Thanh.</span></div>
+                <div class="absolute bottom-4 text-[10px] text-white/20">Bạn đã nhớ chưa?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex justify-center gap-3 sm:gap-4">
+          <button onclick="fcAction('hard')" class="flex items-center gap-2 px-5 py-3 rounded-xl bg-danger/10 border border-danger/20 text-danger text-sm font-medium hover:bg-danger/20 transition-all">
+            <i data-lucide="x" class="w-4 h-4"></i> Khó
+          </button>
+          <button onclick="fcAction('ok')" class="flex items-center gap-2 px-5 py-3 rounded-xl bg-warn/10 border border-warn/20 text-warn text-sm font-medium hover:bg-warn/20 transition-all">
+            <i data-lucide="minus" class="w-4 h-4"></i> Tạm ổn
+          </button>
+          <button onclick="fcAction('easy')" class="flex items-center gap-2 px-5 py-3 rounded-xl bg-success/10 border border-success/20 text-success text-sm font-medium hover:bg-success/20 transition-all">
+            <i data-lucide="check" class="w-4 h-4"></i> Dễ
+          </button>
+        </div>
+      </div>
+
+      <!-- ====== QUIZ VIEW ====== -->
+      <div id="view-quiz" class="view">
+        <!-- Quiz Start -->
+        <div id="quiz-start" class="flex flex-col items-center justify-center py-16">
+          <div class="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 glow-accent">
+            <i data-lucide="brain" class="w-8 h-8 text-accent"></i>
+          </div>
+          <h2 class="text-2xl font-semibold mb-2">Luyện Tập Quiz</h2>
+          <p class="text-white/40 text-sm mb-8 text-center max-w-sm">Chọn đáp án đúng cho từ vựng tiếng Trung. Mỗi vòng 10 câu hỏi.</p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button onclick="startQuiz('zh-vi')" class="px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors flex items-center gap-2">
+              <span class="font-cn text-base">中</span> → Việt
+            </button>
+            <button onclick="startQuiz('vi-zh')" class="px-6 py-3 bg-surface-2 border border-white/10 text-white/70 text-sm font-semibold rounded-xl hover:border-accent/30 hover:text-white transition-all flex items-center gap-2">
+              Việt → <span class="font-cn text-base">中</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Playing -->
+        <div id="quiz-play" class="hidden">
+          <div class="flex items-center justify-between mb-6">
+            <div class="text-sm text-white/40">Câu <span id="q-num" class="text-white font-semibold">1</span>/10</div>
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-accent"></i>
+              <span id="q-score" class="text-sm font-semibold text-accent">0</span>
+            </div>
+          </div>
+          <div class="h-1 bg-surface-2 rounded-full mb-8 overflow-hidden">
+            <div id="q-progress" class="h-full bg-accent rounded-full transition-all duration-300" style="width:10%"></div>
+          </div>
+
+          <!-- Question -->
+          <div class="text-center mb-8">
+            <div id="q-word" class="text-5xl sm:text-6xl font-cn font-medium hanzi-display mb-2">你好</div>
+            <div id="q-prompt" class="text-sm text-white/40">Chọn nghĩa đúng</div>
+          </div>
+
+          <!-- Options -->
+          <div id="q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto mb-6">
+          </div>
+
+          <!-- Next -->
+          <div class="flex justify-center">
+            <button id="q-next" onclick="nextQuestion()" class="hidden px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors">
+              Tiếp theo →
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result -->
+        <div id="quiz-result" class="hidden flex flex-col items-center justify-center py-12">
+          <div id="result-icon" class="text-6xl mb-4">🎉</div>
+          <h2 class="text-2xl font-semibold mb-2" id="result-title">Xuất sắc!</h2>
+          <p class="text-white/40 text-sm mb-6" id="result-desc">Bạn đã hoàn thành vòng quiz</p>
+          <div class="flex gap-6 mb-8">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-success" id="result-correct">0</div>
+              <div class="text-[10px] text-white/30 uppercase">Đúng</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-danger" id="result-wrong">0</div>
+              <div class="text-[10px] text-white/30 uppercase">Sai</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-accent" id="result-xp">0</div>
+              <div class="text-[10px] text-white/30 uppercase">XP</div>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="startQuiz(lastQuizType)" class="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors">Làm lại</button>
+            <button onclick="switchView('dashboard')" class="px-5 py-2.5 bg-surface-2 border border-white/10 text-white/60 text-sm font-medium rounded-xl hover:text-white transition-colors">Về trang chủ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== LESSONS VIEW ====== -->
+      <div id="view-lessons" class="view">
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold">Bài Học Theo HSK</h2>
+          <p class="text-white/40 text-xs mt-1">Lộ trình có cấu trúc từ cơ bản đến nâng cao</p>
+        </div>
+
+        <div class="space-y-4" id="lessons-container">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- ====== STATS VIEW ====== -->
+      <div id="view-stats" class="view">
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold">Thống Kê Học Tập</h2>
+          <p class="text-white/40 text-xs mt-1">Theo dõi tiến độ của bạn</p>
+        </div>
+
+        <!-- Weekly Chart -->
+        <div class="rounded-xl bg-surface border border-white/5 p-5 mb-6">
+          <div class="text-xs text-white/40 mb-4 uppercase tracking-wider">Hoạt động 7 ngày qua</div>
+          <div class="flex items-end justify-between gap-2 h-40" id="weekly-chart">
+          </div>
+          <div class="flex justify-between mt-2" id="weekly-labels">
+          </div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="rounded-xl bg-surface border border-white/5 p-5 mb-6">
+          <div class="text-xs text-white/40 mb-4 uppercase tracking-wider">Tiến độ theo cấp HSK</div>
+          <div class="space-y-4" id="hsk-progress">
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="rounded-xl bg-surface border border-white/5 p-5">
+          <div class="text-xs text-white/40 mb-4 uppercase tracking-wider">Thành tựu</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="achievements">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============ TOAST CONTAINER ============ -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+  <script>
+    // ==================== VOCABULARY DATA ====================
+    const vocabData = [
+      { id:1, hanzi:'你好', pinyin:'nǐ hǎo', viet:'Xin chào', example:'你好，我是Thanh。', exTrans:'Xin chào, tôi là Thanh.', hsk:1 },
+      { id:2, hanzi:'谢谢', pinyin:'xiè xie', viet:'Cảm ơn', example:'谢谢你！', exTrans:'Cảm ơn bạn!', hsk:1 },
+      { id:3, hanzi:'对不起', pinyin:'duì bu qǐ', viet:'Xin lỗi', example:'对不起，我迟到了。', exTrans:'Xin lỗi, tôi đến muộn.', hsk:1 },
+      { id:4, hanzi:'没关系', pinyin:'méi guān xi', viet:'Không sao', example:'没关系！', exTrans:'Không sao!', hsk:1 },
+      { id:5, hanzi:'再见', pinyin:'zài jiàn', viet:'Tạm biệt', example:'明天见，再见！', exTrans:'Ngày mai gặp, tạm biệt!', hsk:1 },
+      { id:6, hanzi:'我', pinyin:'wǒ', viet:'Tôi, ta', example:'我是学生。', exTrans:'Tôi là học sinh.', hsk:1 },
+      { id:7, hanzi:'你', pinyin:'nǐ', viet:'Bạn, ngươi', example:'你好吗？', exTrans:'Bạn khỏe không?', hsk:1 },
+      { id:8, hanzi:'他', pinyin:'tā', viet:'Anh ấy', example:'他是老师。', exTrans:'Anh ấy là giáo viên.', hsk:1 },
+      { id:9, hanzi:'她', pinyin:'tā', viet:'Cô ấy', example:'她很漂亮。', exTrans:'Cô ấy rất xinh đẹp.', hsk:1 },
+      { id:10, hanzi:'我们', pinyin:'wǒ men', viet:'Chúng tôi', example:'我们是朋友。', exTrans:'Chúng tôi là bạn.', hsk:1 },
+      { id:11, hanzi:'什么', pinyin:'shén me', viet:'Cái gì', example:'这是什么？', exTrans:'Đây là cái gì?', hsk:1 },
+      { id:12, hanzi:'怎么', pinyin:'zěn me', viet:'Như thế nào', example:'怎么说？', exTrans:'Nói thế nào?', hsk:1 },
+      { id:13, hanzi:'哪里', pinyin:'nǎ lǐ', viet:'Ở đâu', example:'你在哪里？', exTrans:'Bạn ở đâu?', hsk:1 },
+      { id:14, hanzi:'谁', pinyin:'shéi', viet:'Ai', example:'他是谁？', exTrans:'Anh ấy là ai?', hsk:1 },
+      { id:15, hanzi:'多少', pinyin:'duō shao', viet:'Bao nhiêu', example:'多少钱？', exTrans:'Bao nhiêu tiền?', hsk:1 },
+      { id:16, hanzi:'喜欢', pinyin:'xǐ huan', viet:'Thích', example:'我喜欢喝茶。', exTrans:'Tôi thích uống trà.', hsk:1 },
+      { id:17, hanzi:'学习', pinyin:'xué xí', viet:'Học tập', example:'我学习汉语。', exTrans:'Tôi học tiếng Hán.', hsk:1 },
+      { id:18, hanzi:'工作', pinyin:'gōng zuò', viet:'Công việc / Làm việc', example:'我工作很忙。', exTrans:'Tôi làm việc rất bận.', hsk:1 },
+      { id:19, hanzi:'觉得', pinyin:'jué de', viet:'Cảm thấy', example:'你觉得怎么样？', exTrans:'Bạn cảm thấy thế nào?', hsk:2 },
+      { id:20, hanzi:'帮助', pinyin:'bāng zhù', viet:'Giúp đỡ', example:'请帮助我。', exTrans:'Xin hãy giúp tôi.', hsk:2 },
+      { id:21, hanzi:'准备', pinyin:'zhǔn bèi', viet:'Chuẩn bị', example:'我准备考试。', exTrans:'Tôi chuẩn bị thi.', hsk:2 },
+      { id:22, hanzi:'希望', pinyin:'xī wàng', viet:'Hy vọng', example:'我希望你去。', exTrans:'Tôi hy vọng bạn đi.', hsk:2 },
+      { id:23, hanzi:'环境', pinyin:'huán jìng', viet:'Môi trường', example:'保护环境很重要。', exTrans:'Bảo vệ môi trường rất quan trọng.', hsk:3 },
+      { id:24, hanzi:'经验', pinyin:'jīng yàn', viet:'Kinh nghiệm', example:'他有很多经验。', exTrans:'Anh ấy có nhiều kinh nghiệm.', hsk:3 },
+      { id:25, hanzi:'机会', pinyin:'jī huì', viet:'Cơ hội', example:'这是一个好机会。', exTrans:'Đây là một cơ hội tốt.', hsk:3 },
+      { id:26, hanzi:'关系', pinyin:'guān xi', viet:'Mối quan hệ', example:'他们的关系很好。', exTrans:'Quan hệ của họ rất tốt.', hsk:3 },
+      { id:27, hanzi:'影响', pinyin:'yǐng xiǎng', viet:'Ảnh hưởng', example:'天气影响心情。', exTrans:'Thời tiết ảnh hưởng tâm trạng.', hsk:3 },
+      { id:28, hanzi:'提高', pinyin:'tí gāo', viet:'Nâng cao', example:'提高水平。', exTrans:'Nâng cao trình độ.', hsk:3 },
+      { id:29, hanzi:'重要', pinyin:'zhòng yào', viet:'Quan trọng', example:'健康很重要。', exTrans:'Sức khỏe rất quan trọng.', hsk:2 },
+      { id:30, hanzi:'已经', pinyin:'yǐ jīng', viet:'Đã rồi', example:'他已经走了。', exTrans:'Anh ấy đã đi rồi.', hsk:2 },
+    ];
+
+    const lessonData = [
+      { level: 1, title: 'HSK 1 — Cơ bản', desc: '150 từ vựng nền tảng, giao tiếp hàng ngày', words: 150, color: '#34d399' },
+      { level: 2, title: 'HSK 2 — Sơ cấp', desc: '150 từ vựng mới, diễn đạt ý đơn giản', words: 150, color: '#818cf8' },
+      { level: 3, title: 'HSK 3 — Trung cấp', desc: '300 từ vựng, giao tiếp đời sống & công việc', words: 300, color: '#fbbf24' },
+      { level: 4, title: 'HSK 4 — Cao cấp', desc: '600 từ vựng, bàn luận phức tạp', words: 600, color: '#f87171' },
+      { level: 5, title: 'HSK 5 — Nâng cao', desc: '1300 từ vựng, đọc báo & viết luận', words: 1300, color: '#e879f9' },
+      { level: 6, title: 'HSK 6 — Thành thạo', desc: '2500+ từ vựng, thông thạo ngôn ngữ', words: 2500, color: '#fb923c' },
+    ];
+
+    const achievementData = [
+      { icon: '🔥', title: 'Ngày 1', desc: 'Bắt đầu streak', unlocked: true },
+      { icon: '📚', title: '10 từ', desc: 'Học 10 từ vựng', unlocked: true },
+      { icon: '🎯', title: 'Hoàn hảo', desc: 'Quiz 10/10', unlocked: false },
+      { icon: '⚡', title: '100 XP', desc: 'Tích lũy 100 XP', unlocked: false },
+      { icon: '🗓️', title: '7 ngày', desc: 'Streak 7 ngày', unlocked: false },
+      { icon: '🏆', title: '50 từ', desc: 'Học 50 từ vựng', unlocked: false },
+      { icon: '💎', title: '500 XP', desc: 'Tích lũy 500 XP', unlocked: false },
+      { icon: '🌟', title: '30 ngày', desc: 'Streak 30 ngày', unlocked: false },
+    ];
+
+    // ==================== STATE ====================
+    let state = {
+      streak: 0,
+      xp: 0,
+      wordsLearned: [],
+      todayCount: 0,
+      lastStudyDate: null,
+      quizCorrect: 0,
+      quizTotal: 0,
+      weeklyData: [0,0,0,0,0,0,0],
+    };
+
+    let fcCards = [];
+    let fcIndex = 0;
+    let quizQuestions = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizWrong = 0;
+    let lastQuizType = 'zh-vi';
+    let isFlipped = false;
+
+    // ==================== LOCAL STORAGE ====================
+    function saveState() {
+      localStorage.setItem('thanhnt_vigo_state', JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem('thanhnt_vigo_state');
+      if (saved) {
+        state = { ...state, ...JSON.parse(saved) };
+      }
+      // Check streak
+      const today = new Date().toDateString();
+      if (state.lastStudyDate !== today) {
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        if (state.lastStudyDate !== yesterday && state.lastStudyDate !== today) {
+          state.streak = 0;
         }
+        state.todayCount = 0;
+      }
+    }
 
-        function showCard() {
-            const card = document.getElementById("vocabCard");
-            card.innerText = isShowingWord ? vocabulary[currentIndex].word : vocabulary[currentIndex].meaning;
-            card.style.background = isShowingWord ? "#e3f2fd" : "#fff9c4";
+    function recordStudy() {
+      const today = new Date().toDateString();
+      if (state.lastStudyDate !== today) {
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        if (state.lastStudyDate === yesterday || state.lastStudyDate === null) {
+          state.streak++;
+        } else {
+          state.streak = 1;
         }
+        state.lastStudyDate = today;
+        state.todayCount = 0;
+      }
+      state.todayCount++;
+      const dayIndex = new Date().getDay();
+      state.weeklyData[dayIndex] = state.todayCount;
+      saveState();
+      updateUI();
+    }
 
-        function flipCard() {
-            isShowingWord = !isShowingWord;
-            showCard();
-        }
+    // ==================== VIEW SWITCHING ====================
+    function switchView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + viewId).classList.add('active');
 
-        function nextCard() {
-            currentIndex = (currentIndex + 1) % vocabulary.length;
-            isShowingWord = true;
-            showCard();
-        }
-    </script>
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.querySelector(`.sidebar-link[data-view="${viewId}"]`).classList.add('active');
+
+      const titles = { dashboard: 'Tổng quan', flashcard: 'Thẻ từ vựng', quiz: 'Luyện tập', lessons: 'Bài học', stats: 'Thống kê' };
+      document.getElementById('view-title').textContent = titles[viewId] || '';
+
+      if (viewId === 'flashcard') loadFlashcards();
+      if (viewId === 'lessons') renderLessons();
+      if (viewId === 'stats') renderStats();
+      if (viewId === 'quiz') resetQuizView();
+
+      closeMobileSidebar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== MOBILE SIDEBAR ====================
+    function openMobileSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('mobile-overlay').classList.remove('hidden');
+    }
+    function closeMobileSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('mobile-overlay').classList.add('hidden');
+    }
+
+    // ==================== DASHBOARD ====================
+    function updateUI() {
+      // Streak & XP in header
+      document.getElementById('streak-display').textContent = state.streak;
+      document.getElementById('xp-display').textContent = state.xp + ' XP';
+
+      // Dashboard stats
+      document.getElementById('dash-streak').textContent = state.streak;
+      document.getElementById('dash-words').textContent = state.wordsLearned.length;
+      const accuracy = state.quizTotal > 0 ? Math.round((state.quizCorrect / state.quizTotal) * 100) : 0;
+      document.getElementById('dash-accuracy').textContent = accuracy + '%';
+      document.getElementById('dash-today').textContent = state.todayCount;
+
+      // Goal ring
+      const goal = 20;
+      const current = Math.min(state.todayCount, goal);
+      const pct = current / goal;
+      const circumference = 326.73;
+      document.getElementById('goal-ring').style.strokeDashoffset = circumference * (1 - pct);
+      document.getElementById('goal-current').textContent = current;
+      document.getElementById('goal-target').textContent = goal;
+
+      // Greeting
+      const hour = new Date().getHours();
+      let greet = 'Chào buổi sáng';
+      if (hour >= 12 && hour < 18) greet = 'Chào buổi chiều';
+      else if (hour >= 18) greet = 'Chào buổi tối';
+      document.getElementById('greeting-text').textContent = `${greet}, Thanh 👋`;
+
+      // Recent words
+      renderRecentWords();
+    }
+
+    function renderRecentWords() {
+      const container = document.getElementById('recent-words');
+      if (state.wordsLearned.length === 0) {
+        container.innerHTML = '<div class="p-5 text-center text-white/20 text-sm">Chưa có từ vựng. Bắt đầu học ngay!</div>';
+        return;
+      }
+      const recent = state.wordsLearned.slice(-5).reverse();
+      container.innerHTML = recent.map(id => {
+        const w = vocabData.find(v => v.id === id);
+        if (!w) return '';
+        return `<div class="flex items-center justify-between px-5 py-3 hover:bg-white/[0.02] transition-colors">
+          <div class="flex items-center gap-4">
+            <span class="text-xl font-cn">${w.hanzi}</span>
+            <div>
+              <div class="text-sm text-white/70">${w.viet}</div>
+              <div class="text-[10px] text-white/30">${w.pinyin}</div>
+            </div>
+          </div>
+          <span class="tag-hsk${w.hsk} text-[8px] px-1.5 py-0.5 rounded-full">HSK ${w.hsk}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // ==================== FLASHCARDS ====================
+    function loadFlashcards() {
+      const level = document.getElementById('fc-level').value;
+      fcCards = level === 'all' ? [...vocabData] : vocabData.filter(v => v.hsk === parseInt(level));
+      // Shuffle
+      fcCards.sort(() => Math.random() - 0.5);
+      fcIndex = 0;
+      isFlipped = false;
+      showFlashcard();
+    }
+
+    function showFlashcard() {
+      if (fcCards.length === 0) return;
+      const card = fcCards[fcIndex];
+      document.getElementById('fc-hanzi').textContent = card.hanzi;
+      document.getElementById('fc-pinyin').textContent = card.pinyin;
+      document.getElementById('fc-viet').textContent = card.viet;
+      document.getElementById('fc-example').innerHTML = `${card.example}<br><span class="text-white/30 text-xs not-italic">${card.exTrans}</span>`;
+      const tagEl = document.getElementById('fc-tag');
+      tagEl.textContent = 'HSK ' + card.hsk;
+      tagEl.className = `tag-hsk${card.hsk} text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider`;
+
+      document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcCards.length * 100) + '%';
+      document.getElementById('fc-count').textContent = `${fcIndex + 1}/${fcCards.length}`;
+
+      // Unflip
+      if (isFlipped) {
+        document.getElementById('flashcard').classList.remove('flipped');
+        isFlipped = false;
+      }
+    }
+
+    function flipCard() {
+      const fc = document.getElementById('flashcard');
+      fc.classList.toggle('flipped');
+      isFlipped = !isFlipped;
+    }
+
+    function fcAction(difficulty) {
+      const card = fcCards[fcIndex];
+      if (!state.wordsLearned.includes(card.id)) {
+        state.wordsLearned.push(card.id);
+      }
+
+      let xpGain = difficulty === 'easy' ? 5 : difficulty === 'ok' ? 3 : 1;
+      state.xp += xpGain;
+      recordStudy();
+
+      if (difficulty === 'easy') {
+        showToast(`+${xpGain} XP · Dễ quá! 🎯`, 'success');
+      } else if (difficulty === 'ok') {
+        showToast(`+${xpGain} XP · Cần ôn lại nhé 💪`, 'info');
+      } else {
+        showToast(`+${xpGain} XP · Đừng lo, sẽ nhớ thôi! 🔁`, 'warn');
+      }
+
+      fcIndex++;
+      if (fcIndex >= fcCards.length) {
+        showToast('🎉 Đã hết bộ thẻ! Xáo lại...', 'success');
+        fcCards.sort(() => Math.random() - 0.5);
+        fcIndex = 0;
+      }
+      showFlashcard();
+    }
+
+    // ==================== QUIZ ====================
+    function resetQuizView() {
+      document.getElementById('quiz-start').classList.remove('hidden');
+      document.getElementById('quiz-play').classList.add('hidden');
+      document.getElementById('quiz-result').classList.add('hidden');
+    }
+
+    function startQuiz(type) {
+      lastQuizType = type;
+      quizScore = 0;
+      quizWrong = 0;
+      quizIndex = 0;
+      isFlipped = false;
+
+      // Generate 10 questions
+      const shuffled = [...vocabData].sort(() => Math.random() - 0.5);
+      quizQuestions = shuffled.slice(0, 10).map(word => {
+        const wrongAnswers = vocabData.filter(v => v.id !== word.id).sort(() => Math.random() - 0.5).slice(0, 3);
+        const options = [word, ...wrongAnswers].sort(() => Math.random() - 0.5);
+        return { word, options, type };
+      });
+
+      document.getElementById('quiz-start').classList.add('hidden');
+      document.getElementById('quiz-result').classList.add('hidden');
+      document.getElementById('quiz-play').classList.remove('hidden');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizQuestions[quizIndex];
+      document.getElementById('q-num').textContent = quizIndex + 1;
+      document.getElementById('q-score').textContent = quizScore;
+      document.getElementById('q-progress').style.width = ((quizIndex + 1) / 10 * 100) + '%';
+
+      if (q.type === 'zh-vi') {
+        document.getElementById('q-word').textContent = q.word.hanzi;
+        document.getElementById('q-prompt').textContent = 'Chọn nghĩa tiếng Việt';
+      } else {
+        document.getElementById('q-word').textContent = q.word.viet;
+        document.getElementById('q-word').classList.add('text-4xl', 'sm:text-5xl');
+        document.getElementById('q-word').classList.remove('text-5xl', 'sm:text-6xl', 'font-cn');
+        document.getElementById('q-prompt').textContent = 'Chọn từ tiếng Trung đúng';
+      }
+      document.getElementById('q-word').className = 'hanzi-display font-cn font-medium mb-2 ' + (q.type === 'zh-vi' ? 'text-5xl sm:text-6xl' : 'text-4xl sm:text-5xl');
+
+      const optContainer = document.getElementById('q-options');
+      optContainer.innerHTML = q.options.map((opt, i) => {
+        const text = q.type === 'zh-vi' ? opt.viet : `${opt.hanzi} (${opt.pinyin})`;
+        return `<button onclick="checkAnswer(${i}, ${opt.id === q.word.id})" class="quiz-opt q-opt p-4 rounded-xl border border-white/10 bg-surface text-left transition-all" data-idx="${i}" data-correct="${opt.id === q.word.id}">
+          <span class="text-xs text-white/30 mr-2">${['A','B','C','D'][i]}</span>
+          <span class="text-sm ${q.type !== 'zh-vi' ? 'font-cn' : ''}">${text}</span>
+        </button>`;
+      }).join('');
+
+      document.getElementById('q-next').classList.add('hidden');
+    }
+
+    function checkAnswer(idx, isCorrect) {
+      const opts = document.querySelectorAll('.q-opt');
+      opts.forEach(o => o.classList.add('disabled'));
+
+      if (isCorrect) {
+        opts[idx].classList.add('correct', 'glow-success');
+        quizScore++;
+        state.xp += 10;
+        state.quizCorrect++;
+      } else {
+        opts[idx].classList.add('wrong', 'shake');
+        // Reveal correct
+        opts.forEach(o => {
+          if (o.dataset.correct === 'true') o.classList.add('correct');
+        });
+        quizWrong++;
+        state.quizTotal++;
+      }
+      state.quizTotal = state.quizTotal || 1; // avoid div by 0
+
+      saveState();
+      updateUI();
+      document.getElementById('q-score').textContent = quizScore;
+
+      document.getElementById('q-next').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      quizIndex++;
+      if (quizIndex >= quizQuestions.length) {
+        showQuizResult();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-play').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+
+      const pct = Math.round((quizScore / 10) * 100);
+      document.getElementById('result-correct').textContent = quizScore;
+      document.getElementById('result-wrong').textContent = quizWrong;
+      document.getElementById('result-xp').textContent = quizScore * 10;
+
+      if (pct >= 80) {
+        document.getElementById('result-icon').textContent = '🎉';
+        document.getElementById('result-title').textContent = 'Xuất sắc!';
+        document.getElementById('result-desc').textContent = 'Bạn đang làm rất tốt!';
+      } else if (pct >= 50) {
+        document.getElementById('result-icon').textContent = '💪';
+        document.getElementById('result-title').textContent = 'Khá tốt!';
+        document.getElementById('result-desc').textContent = 'Cần ôn thêm một chút nhé.';
+      } else {
+        document.getElementById('result-icon').textContent = '📖';
+        document.getElementById('result-title').textContent = 'Cần cố gắng hơn';
+        document.getElementById('result-desc').textContent = 'Hãy ôn lại thẻ từ vựng nhé.';
+      }
+
+      recordStudy();
+    }
+
+    // ==================== LESSONS ====================
+    function renderLessons() {
+      const container = document.getElementById('lessons-container');
+      container.innerHTML = lessonData.map(lesson => {
+        const learned = state.wordsLearned.filter(id => {
+          const w = vocabData.find(v => v.id === id);
+          return w && w.hsk === lesson.level;
+        }).length;
+        const totalInDb = vocabData.filter(v => v.hsk === lesson.level).length;
+        const pct = totalInDb > 0 ? Math.round((learned / totalInDb) * 100) : 0;
+
+        return `<div class="rounded-xl bg-surface border border-white/5 p-5 hover:border-white/10 transition-all">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-cn text-xl font-bold flex-shrink-0" style="background: ${lesson.color}15; color: ${lesson.color}; border: 1px solid ${lesson.color}30;">
+              ${lesson.level}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <h3 class="text-sm font-semibold">${lesson.title}</h3>
+                <span class="text-[10px] font-mono" style="color: ${lesson.color}">${pct}%</span>
+              </div>
+              <p class="text-xs text-white/30 mb-3">${lesson.desc}</p>
+              <div class="h-1.5 bg-surface-3 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-700" style="width:${pct}%; background: ${lesson.color}"></div>
+              </div>
+              <div class="flex justify-between mt-2">
+                <span class="text-[10px] text-white/20">${learned}/${totalInDb} từ đã học (trong DB)</span>
+                <span class="text-[10px] text-white/20">${lesson.words} từ tổng</span>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ==================== STATS ====================
+    function renderStats() {
+      // Weekly chart
+      const chartContainer = document.getElementById('weekly-chart');
+      const labelsContainer = document.getElementById('weekly-labels');
+      const days = ['CN','T2','T3','T4','T5','T6','T7'];
+      const maxVal = Math.max(...state.weeklyData, 5);
+
+      chartContainer.innerHTML = state.weeklyData.map((val, i) => {
+        const h = Math.max((val / maxVal) * 100, 4);
+        const isToday = i === new Date().getDay();
+        return `<div class="flex-1 flex flex-col items-center justify-end">
+          <div class="text-[10px] text-white/30 mb-1">${val}</div>
+          <div class="w-full max-w-[32px] rounded-t-md transition-all duration-700 ${isToday ? 'bg-accent' : 'bg-accent/30'}" style="height:${h}%"></div>
+        </div>`;
+      }).join('');
+
+      labelsContainer.innerHTML = days.map((d, i) => {
+        const isToday = i === new Date().getDay();
+        return `<div class="flex-1 text-center text-[10px] ${isToday ? 'text-accent font-semibold' : 'text-white/20'}">${d}</div>`;
+      }).join('');
+
+      // HSK Progress
+      const hskContainer = document.getElementById('hsk-progress');
+      hskContainer.innerHTML = lessonData.map(lesson => {
+        const learned = state.wordsLearned.filter(id => {
+          const w = vocabData.find(v => v.id === id);
+          return w && w.hsk === lesson.level;
+        }).length;
+        const totalInDb = vocabData.filter(v => v.hsk === lesson.level).length;
+        const pct = totalInDb > 0 ? Math.round((learned / totalInDb) * 100) : 0;
+        return `<div>
+          <div class="flex justify-between text-xs mb-1.5">
+            <span class="text-white/60">HSK ${lesson.level}</span>
+            <span style="color: ${lesson.color}">${learned}/${totalInDb}</span>
+          </div>
+          <div class="h-2 bg-surface-3 rounded-full overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-1000" style="width:${pct}%; background: ${lesson.color}"></div>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Achievements
+      const achContainer = document.getElementById('achievements');
+      achContainer.innerHTML = achievementData.map(a => {
+        return `<div class="p-3 rounded-xl border text-center ${a.unlocked ? 'bg-accent/5 border-accent/20' : 'bg-surface-2 border-white/5 opacity-40'}">
+          <div class="text-2xl mb-1">${a.icon}</div>
+          <div class="text-[10px] font-semibold ${a.unlocked ? 'text-white/70' : 'text-white/30'}">${a.title}</div>
+          <div class="text-[8px] text-white/20 mt-0.5">${a.desc}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // ==================== TOAST ====================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = { success: 'border-success/30 bg-success/10', error: 'border-danger/30 bg-danger/10', info: 'border-accent/30 bg-accent/10', warn: 'border-warn/30 bg-warn/10' };
+      const icons = { success: 'check-circle', error: 'x-circle', info: 'info', warn: 'alert-triangle' };
+      const textColors = { success: 'text-success', error: 'text-danger', info: 'text-accent', warn: 'text-warn' };
+
+      toast.className = `toast-in flex items-center gap-2 px-4 py-3 rounded-xl border ${colors[type]} backdrop-blur-md shadow-lg`;
+      toast.innerHTML = `<i data-lucide="${icons[type]}" class="w-4 h-4 ${textColors[type]} flex-shrink-0"></i><span class="text-xs text-white/80">${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.classList.remove('toast-in');
+        toast.classList.add('toast-out');
+        setTimeout(() => toast.remove(), 350);
+      }, 2500);
+    }
+
+    // ==================== KEYBOARD SHORTCUTS ====================
+    document.addEventListener('keydown', (e) => {
+      const activeView = document.querySelector('.view.active')?.id;
+      if (activeView === 'view-flashcard') {
+        if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+        if (e.key === '1') fcAction('hard');
+        if (e.key === '2') fcAction('ok');
+        if (e.key === '3') fcAction('easy');
+      }
+    });
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      updateUI();
+      lucide.createIcons();
+      loadFlashcards();
+    });
+  </script>
 </body>
 </html>
