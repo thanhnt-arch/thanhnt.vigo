@@ -121,7 +121,7 @@
 
   <div id="loading-screen" class="fixed inset-0 bg-bg z-[500] flex flex-col items-center justify-center p-4">
     <div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
-    <p class="text-sm font-medium text-txt-2">Đang tải cấu hình học tập và dữ liệu từ Google Sheets...</p>
+    <p class="text-sm font-medium text-txt-2">Đang tải cấu hình học tập và dữ liệu...</p>
   </div>
 
   <div id="auth-screen" class="fixed inset-0 bg-bg z-[200] flex items-center justify-center p-4 hidden">
@@ -395,7 +395,7 @@
                   <div class="flip-back absolute inset-0 rounded-2xl bg-accent-light border-2 border-accent/20 flex flex-col items-center justify-center p-6">
                     <div id="fc-viet" class="text-2xl font-semibold mb-3 text-txt">Xin chào</div>
                     <div id="fc-example" class="text-sm text-txt-2 text-center leading-relaxed mb-4 font-cn">你好，我是Thanh。<br><span class="text-txt-3 text-xs not-italic">Xin chào, tôi là Thanh.</span></div>
-                    <div class="absolute bottom-4 text-[10px] text-accent-dim">Bạn đã nhớ chưa?</div>
+                    <div class="absolute bottom-4 text-[10px] text-accent-dim">Baee đã nhớ chưa?</div>
                   </div>
                 </div>
               </div>
@@ -468,7 +468,7 @@
           <div id="quiz-result" class="hidden flex flex-col items-center justify-center py-12">
             <div id="result-icon" class="text-6xl mb-4 bounce-in">🎉</div>
             <div class="text-2xl font-semibold text-txt mb-2" id="result-title">Xuất sắc!</div>
-            <p class="text-txt-3 text-sm mb-6" id="result-desc">Bạn đã hoàn thành vòng quiz</p>
+            <p class="text-txt-3 text-sm mb-6" id="result-desc">Baee đã hoàn thành vòng quiz</p>
             <div class="flex gap-6 mb-8">
               <div class="text-center"><div class="text-3xl font-bold text-accent" id="result-correct">0</div><div class="text-[10px] text-txt-3 uppercase">Đúng</div></div>
               <div class="text-center"><div class="text-3xl font-bold text-danger" id="result-wrong">0</div><div class="text-[10px] text-txt-3 uppercase">Sai</div></div>
@@ -484,7 +484,7 @@
         <div id="view-lessons" class="view">
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-txt">Bài Học Theo HSK</h2>
-            <p class="text-txt-3 text-xs mt-1">Lộ trình có cấu trúc lưu từ Sheet</p>
+            <p class="text-txt-3 text-xs mt-1">Lộ trình có cấu trúc lưu trữ</p>
           </div>
           <div class="space-y-4" id="lessons-container"></div>
         </div>
@@ -492,7 +492,7 @@
         <div id="view-stats" class="view">
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-txt">Thống Kê Học Tập</h2>
-            <p class="text-txt-3 text-xs mt-1">Theo dõi tiến độ được lưu đám mây</p>
+            <p class="text-txt-3 text-xs mt-1">Theo dõi tiến độ được lưu </p>
           </div>
           <div class="rounded-xl bg-panel border border-border p-5 mb-6">
             <div class="text-xs text-txt-3 mb-4 uppercase tracking-wider">Hoạt động 7 ngày qua</div>
@@ -612,11 +612,11 @@
       const inputPass = document.getElementById('login-password').value;
 
       if (!inputUser) {
-        showToast("Vui lòng điền tên đăng nhập đồng dăm ơi!", "warn");
+        showToast("Vui lòng điền tên đăng nhập Baee ơi!", "warn");
         return;
       }
       if (inputPass !== "123456") {
-        showToast("Sai mật khẩu hệ thống rồi đồng dăm ơi!", "error");
+        showToast("Sai mật khẩu hệ thống rồi Baee ơi!", "error");
         return;
       }
 
@@ -628,14 +628,14 @@
         document.getElementById('main-app').classList.remove('hidden');
         
         loadUserState();
-        showToast(`Đăng nhập thành công! Chào đồng dăm quay trở lại.`, `success`);
+        showToast(`Đăng nhập thành công! Chào baee quay trở lại.`, `success`);
       } else {
         showToast("Tài khoản này chưa được cấp quyền truy cập!", "error");
       }
     }
 
     function handleLogout() {
-      if(confirm("Đồng dăm muốn rời hệ thống shao?")) {
+      if(confirm("Baee muốn rời bỏ mình shao?")) {
         localStorage.removeItem('thanhnt_current_session');
         currentUserKey = null;
         document.getElementById('auth-screen').classList.remove('hidden');
